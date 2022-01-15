@@ -1,39 +1,53 @@
-import { useState } from "react";
-import Values from 'values.js'
+import React, { useState } from "react";
+import Values from "values.js";
+import SingleColor from "./SingleColor";
 
 function App() {
   const [color, setColor] = useState("");
-  const [error,setError]=useState(false);
-  const [list,setList]=useState(new Values("#FF7777").all(10))
+  const [error, setError] = useState(false);
+  const [list, setList] = useState(new Values("#FF7777").all(10));
 
-  const handleSubmit = (e)=>{
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try{
-      let colors=new Values(color).all(20)
-      setList(colors)
-      console.log(colors)
-    }catch(error){
-      setError(true)
-      console.log(error)
+    try {
+      let colors = new Values(color).all(10);
+      setList(colors);
+    } catch (error) {
+      setError(true);
+      console.log(error);
     }
   };
+
   return (
-    <div>
+    <>
       <section className="container">
-        <h3>Hex Color Genrator </h3>
+        <h3>Color Generator</h3>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="type color"
+            placeholder="#FF7777 or type new.."
             value={color}
             onChange={(e) => setColor(e.target.value)}
-            className={`${error ? "error":null}`}
+            className={`${error ? "error" : null}`}
           />
-          <button  className="btn" type="submit">Get Colors</button>
+          <button className="btn" type="submit">
+            Get Colors
+          </button>
         </form>
       </section>
-      <section></section>
-    </div>
+      <section className="colors">
+        {list.map((color, index) => {
+          return (
+            <SingleColor
+              key={index}
+              {...color}
+              index={index}
+              hexColor={color.hex}
+            />
+          );
+        })}
+      </section>
+    </>
   );
 }
 
